@@ -4,6 +4,14 @@ let's review one part of it, the link data...
 
 first we need to know where to find it. as described in the wiki it's chunked into segments with all sorts of preprocessed data available. for this quick hack all i want is the meta data...
 
+    $ s3cmd get s3://aws-publicdatasets/common-crawl/parse-output/valid_segments.txt 
+      1341690147253
+      1341690148298
+      1341690149519
+      ...
+
+just pick a random one...
+
     $ s3cmd ls s3://aws-publicdatasets/common-crawl/parse-output/segment/1341690147253/ | grep metadata
       2012-07-08 00:53  41937063   s3://aws-publicdatasets/common-crawl/parse-output/segment/1341690147253/metadata-00000
       2012-07-08 00:54  42539894   s3://aws-publicdatasets/common-crawl/parse-output/segment/1341690147253/metadata-00001
