@@ -93,7 +93,7 @@ public class ExtractTldLinks extends Configured implements Tool {
         
         // from link
         String fromLink = MetaDataToTldLinks.tldOf(url.toString());        
-        if (fromLink==null) {
+        if (fromLink == null) {
           reporter.getCounter("fromLink", "wasNull").increment(1);
           return;
         }
@@ -121,8 +121,10 @@ public class ExtractTldLinks extends Configured implements Tool {
 
     public void reduce(Text fromToLink, Iterator<IntWritable> counts, OutputCollector<Text, IntWritable> collector, Reporter reporter) throws IOException {
       int sum = 0;
+      
       while (counts.hasNext())
         sum += counts.next().get();
+      
       collector.collect(fromToLink, new IntWritable(sum));
     }
     

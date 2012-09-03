@@ -39,11 +39,11 @@ public class MetaDataToTldLinks {
       return NO_LINKS;
     
     JsonElement content = metaData.get("content");
-    if (content==null)
+    if (content == null)
       return NO_LINKS;
     
     JsonArray links = content.getAsJsonObject().getAsJsonArray("links");
-    if (links==null)
+    if (links == null)
       return NO_LINKS;
     
     Set<String> outboundLinks = new HashSet<String>();
@@ -52,7 +52,7 @@ public class MetaDataToTldLinks {
       JsonObject link = linke.getAsJsonObject();
       if ("a".equals(link.get("type").getAsString())) { // anchor        
         String tld = tldOf(link.get("href").getAsString());
-        if (tld==null)
+        if (tld == null)
           ++numNull;
         else
           outboundLinks.add(tld);
@@ -67,7 +67,8 @@ public class MetaDataToTldLinks {
       String tld = new URI(url).getHost();
       if (tld.startsWith("www."))
         tld = tld.substring(4);
-      return tld;
+      tld = tld.trim();
+      return tld.length()==0 ? null : tld;
     }
     catch (URISyntaxException e) {
       return null;

@@ -140,7 +140,7 @@ so with a bigger cluster, and a better top level domain extraction function, the
 
 ## java!
 
-revisiting this one a bit i've included a java version with slightly more robust url handling...
+revisiting this one a bit i've included a java version with slightly more robust url handling (and only includes 'a' refs)
 
     $ maven package
     $ hadoop jar target/links_in_metadata-1.0.0-jar-with-dependencies.jar com.matpalm.ExtractTldLinks \
