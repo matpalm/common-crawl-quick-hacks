@@ -138,7 +138,20 @@ to get a set of frequencies (like how we used `sort | uniq -c | sort -nr`) above
 
 so with a bigger cluster, and a better top level domain extraction function, the links of the internet are yours for the taking!!
 
+## java!
 
+revisiting this one a bit i've included a java version with slightly more robust url handling...
+
+    $ maven package
+    $ hadoop jar target/links_in_metadata-1.0.0-jar-with-dependencies.jar com.matpalm.ExtractTldLinks \
+     path_to_some_metadata_files output
+    $ hadoop fs -text output/part-00000
+     picasaweb.google.com sites.google.com	62
+     picasaweb.google.com picasa.google.com		62
+     picasaweb.google.com mail.google.com		62
+     picasaweb.google.com groups.google.com		62
+
+     
 
 
 
