@@ -1,6 +1,8 @@
 package com.matpalm;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -25,7 +27,12 @@ import org.apache.hadoop.util.ToolRunner;
 import com.matpalm.MetaDataToTldLinks.ParseResult;
 
 /**
- * a simple demo of extracting links from the meta data data set.
+ * extracting links from the meta data data set.
+ * 
+ * either 
+ *  hadoop jar foo.jar com.matpalm.ExtractTldLinks /path/to/inputs /path/to/output
+ * or
+ *  cat manifest_of_path_to_inputs | hadoop jar foo.jar com.matpalm.ExtractTldLinks /path/to/output 
  */
 public class ExtractTldLinks extends Configured implements Tool {
   
@@ -39,12 +46,24 @@ public class ExtractTldLinks extends Configured implements Tool {
   }
   
   public int run(String[] args) throws Exception {
-    
-    if (args.length!=2) {
-      throw new RuntimeException("usage: "+getClass().getName()+" <input> <output>");
-    }
-    
+
     JobConf conf = new JobConf(getConf(), getClass());
+
+    if (args.length==1) {
+      // assume inputs from stdin
+      BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+      while (in.ready())
+        FileInputFormat.addInputPath(conf, new Path(in.readLine()));
+      FileOutputFormat.setOutputPath(conf, new Path(args[0]));
+    }
+    else if (args.length==2) {
+      FileInputFormat.addInputPath(conf, new Path(args[0]));
+      FileOutputFormat.setOutputPath(conf, new Path(args[1]));      
+    }
+    else {
+      throw new RuntimeException("usage: either "+getClass().getName()+" <input> <output> or"+
+          " cat inputs | "+getClass().getName()+" output");
+    }
     
     conf.setJobName(getClass().getName());   
 
@@ -58,8 +77,6 @@ public class ExtractTldLinks extends Configured implements Tool {
     conf.setReducerClass(SumReducer.class);
         
     conf.setInputFormat(SequenceFileInputFormat.class);
-    FileInputFormat.addInputPath(conf, new Path(args[0]));
-    FileOutputFormat.setOutputPath(conf, new Path(args[1]));
     
     if (optSet(conf, "compressOutput")) {
       System.err.println("compressing output with sequence files");;
