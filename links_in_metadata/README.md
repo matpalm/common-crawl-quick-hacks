@@ -143,8 +143,8 @@ so with a bigger cluster, and a better top level domain extraction function, the
 revisiting this one a bit i've included a java version with slightly more robust url handling (and only includes 'a' refs)
 
     $ maven package
-    $ hadoop jar target/links_in_metadata-1.0.0-jar-with-dependencies.jar com.matpalm.ExtractTldLinks \
-     path_to_some_metadata_files output
+    $ s3cmd ls s3://aws-publicdatasets/common-crawl/parse-output/segment/1341690147253/ | grep metadata | head -n1 > manifest
+    $ cat manifest | hadoop jar target/links_in_metadata-1.0.0-jar-with-dependencies.jar com.matpalm.ExtractTldLinks output
     $ hadoop fs -text output/part-00000
      picasaweb.google.com sites.google.com	62
      picasaweb.google.com picasa.google.com		62
