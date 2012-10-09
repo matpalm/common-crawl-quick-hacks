@@ -65,6 +65,8 @@ public class MetaDataToTldLinks {
   public static String tldOf(String url) {
     try {
       String tld = new URI(url).getHost();
+      if (tld==null)
+    	  return null;
       if (tld.startsWith("www."))
         tld = tld.substring(4);
       tld = tld.trim();
