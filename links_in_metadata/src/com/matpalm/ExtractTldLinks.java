@@ -78,13 +78,12 @@ public class ExtractTldLinks extends Configured implements Tool {
         
     conf.setInputFormat(SequenceFileInputFormat.class);
     
-    if (optSet(conf, "compressOutput")) {
-      System.err.println("compressing output with sequence files");;
-      conf.set("mapred.output.compress", "true");
-      conf.set("mapred.output.compression.type", "BLOCK");
-      conf.set("mapred.output.compression.codec", "org.apache.hadoop.io.compress.SnappyCodec");
+    conf.set("mapred.output.compress", "true");
+    conf.set("mapred.output.compression.type", "BLOCK");
+    conf.set("mapred.output.compression.codec", "org.apache.hadoop.io.compress.GzipCodec");
+
+    if (optSet(conf, "SequenceFileOutputFormat"))
       conf.setOutputFormat(SequenceFileOutputFormat.class);
-    }
 
     JobClient.runJob(conf);
     
@@ -121,9 +120,10 @@ public class ExtractTldLinks extends Configured implements Tool {
         
         // emit combos
         for (String toLink : toLinks.links) {
-          if (!toLink.equals(fromLink)) {
+          if (toLink.equals(fromLink))
+            reporter.getCounter("fromLink", "equalsToLink").increment(1);
+          else
             collector.collect(new Text(fromLink+" "+toLink), ONE);
-          }
         }
         
       }
