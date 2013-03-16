@@ -24,4 +24,4 @@ for line in sys.stdin:
             print "\t".join([from_tld, to_tld])
     except:
         # can't win em all...
-        pass
+        print >>sys.stderr, "reporter:counter:exception,1"
