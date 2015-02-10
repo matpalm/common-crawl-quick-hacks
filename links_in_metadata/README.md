@@ -142,7 +142,7 @@ so with a bigger cluster, and a better top level domain extraction function, the
 
 revisiting this one a bit i've included a java version with slightly more robust url handling (and only includes 'a' refs)
 
-    $ maven package
+    $ mvn package
     $ s3cmd ls s3://aws-publicdatasets/common-crawl/parse-output/segment/1341690147253/ | grep metadata | head -n1 > manifest
     $ cat manifest | hadoop jar target/links_in_metadata-1.0.0-jar-with-dependencies.jar com.matpalm.ExtractTldLinks output
     $ hadoop fs -text output/part-00000
